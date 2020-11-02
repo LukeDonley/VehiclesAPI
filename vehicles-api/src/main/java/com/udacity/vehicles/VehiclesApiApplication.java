@@ -37,6 +37,7 @@ public class VehiclesApiApplication {
             repository.save(new Manufacturer(102, "Ford"));
             repository.save(new Manufacturer(103, "BMW"));
             repository.save(new Manufacturer(104, "Dodge"));
+            repository.save(new Manufacturer(105, "Honda"));
         };
     }
 
