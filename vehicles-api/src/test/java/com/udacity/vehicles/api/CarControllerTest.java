@@ -30,6 +30,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 /**
  * Implements testing of the CarController class.
@@ -114,7 +115,25 @@ public class CarControllerTest {
                 .andExpect(jsonPath("details.model", is(car.getDetails().getModel())))
                 .andExpect(jsonPath("details.mileage", is(car.getDetails().getMileage())));
     }
-
+    /**
+     * Tests the update of a single car by ID.
+     * @throws Exception if the update operation of a vehicle fails
+     */
+    @Test
+    public void updateCar() throws Exception {
+        Car car = getCar();
+        car.setId(1L);
+        Details newDetails = car.getDetails();
+        newDetails.setModel("Malibu");
+        car.setDetails(newDetails);
+        mvc.perform(
+                put("/cars/{id}", 1)
+                        .content(json.write(car).getJson())
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andExpect(content().json(json.write(car).getJson()));
+    }
     /**
      * Tests the deletion of a single car by ID.
      * @throws Exception if the delete operation of a vehicle fails
